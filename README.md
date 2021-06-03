@@ -11,7 +11,7 @@ devtools::install_github("GarrettLab/INA")
 
 library(INA)
 
-##General references for impact network analysis
+## General references for impact network analysis
 
 Garrett, K. A. 2021a. User guide to impact network analysis (INA). CGIAR Research Program on Roots, Tubers and Bananas (RTB). RTB User Guide. No. 2021-4. Lima, Peru. https://cgspace.cgiar.org/handle/10568/111326
 
@@ -19,17 +19,17 @@ Garrett, K. A. 2021b. Impact network analysis and the INA R package: Decision su
 
 ## Vignettes illustrating analyses in Garrett 2021b
 
-Versions of these vignettes are also included in this depository as pdfs
+Versions of these vignettes are included in this depository as pdfs, as well as being available through the links indicated
 
-V1. Identifying key sampling locations for smart surveillance using the smartsurv function. (Exp 1 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/V1-smartsurv-function-Exp-1.pdf
+V1. Identifying key sampling locations for smart surveillance using the smartsurv function. (Exp 1 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/INA-smartsurv.pdf
 
-V2. Smaller functions that can create system components for the INAscene function. Link: https://www.garrettlab.com/wp-content/uploads/2020/10/V2-components-of-INAscene-function.pdf 
+V2. Smaller functions that can create system components for the INAscene function. Link: https://www.garrettlab.com/wp-content/uploads/2020/10/INA-INAscene-smaller-functions.pdf
 
-V3. Evaluating potential adaptation plans for regional management under global change using the INAscene function. (Exp 2 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/V3-INAscene-for-project-evaluation-Exp-2.pdf
+V3. Evaluating the likelihood of project success in scenario analyses for regional management using the INAscene function. (Exp 2 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/INA-INAscene-project-scenario-analysis-1.pdf
 
-V4. Evaluating the likelihood of project success in scenario analyses for regional management using the INAscene function. (Exp 3 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/V4-INAscene-for-adaptation-planning-Exp-3.pdf
+V4. Evaluating potential adaptation plans for regional management under global change using the INAscene function. (Exp 3 in Garrett 2021b) Link: https://www.garrettlab.com/wp-content/uploads/2020/10/INA-INAscene-adaptation.pdf
 
-V5. How function speed scales with node number: V5 How function speed scales with node number. Link: https://www.garrettlab.com/wp-content/uploads/2020/10/V5-How-function-speed-scales-with-node-number.pdf
+V5. How function speed scales with node number: V5 How function speed scales with node number. Link: https://www.garrettlab.com/wp-content/uploads/2020/10/INA-package-effects-of-node-number-on-speed.pdf
 
 ## Examples of published applications
 
