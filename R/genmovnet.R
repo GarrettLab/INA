@@ -3,7 +3,7 @@
 #'
 #' This function generates an adjacency matrix for movement, assumed symmetric (in this version).  It is used by functions including \code{INAscene}. The movement adjacency matrix is composed of 1s and 0s only if lktype="pa" option is used
 #'
-#' Updated 2020-09-05
+#' Updated 2021-10-22
 
 #' @param amdist4 the function of distance used to estimate movement probability - 'random' (not related to distance) or 'powerlaw' (inverse power law) or 'exp' (negative exponential, to be added)
 #' @param iplot if T, generates igraph plot of adjacency matrix
@@ -11,6 +11,7 @@
 #' @param amplb4 inverse power law parameter b in ad^(-b)
 #' @param amrandp4 random matrix with entries binomial with probability p
 #' @param geocoords4n the matrix of xy coordinates for node locations, used when the probability of a link is a function of distance (note that the distance between each pair of locations is assumed to be greater than 1)
+#' @param roaddatafilepath4n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords
 #' @keywords dispersal
 #' @export 
 #' @import igraph
@@ -28,13 +29,21 @@
 #' x9 <- genmovnet(j <- genlocs(numnodes4=300, xrange4 = c(0, 10), yrange4 = c(0, 100)), amdist4='powerlaw', ampla4=2, amplb4=1, iplot=T)
 
 
-genmovnet <- function(geocoords4n, amdist4, iplot=F, amrandp4, ampla4, amplb4){
+genmovnet <- function(geocoords4n, amdist4, roaddatafilepath4n, iplot=F, amrandp4, ampla4, amplb4){
 
   dimam <- dim(geocoords4n)[1]
 
   if (amdist4 == 'powerlaw') { # ad^(-b)
 
-    tdist <- as.matrix(dist(geocoords4n, method = "euclidean", diag=T, upper=T))
+    tdist = NA
+    if(!is.na(roaddatafilepath4n)) {
+      #Load Road Distance Data
+      tdist <- roaddata(geocoords5=geocoords4n, roaddatafilepath5=roaddatafilepath4n)
+    } else {
+      tdist <- as.matrix(dist(geocoords4n, method = "euclidean", diag=T, upper=T))
+    }
+    #tdist <- as.matrix(dist(geocoords4n, method = "euclidean", diag=T, upper=T))
+
     linkmat <- ampla4*tdist^(-amplb4)  
   }
 
