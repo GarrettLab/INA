@@ -61,41 +61,43 @@ roaddata = function(geocoords5, roaddatafilepath5) {
     #List varible order is important, OSRM breaks if out of order
     locations = data.frame(id=id, lon=lon, lat=lat)
 
-		count = length(locations$id);
-		distMat = matrix(nrow=count, ncol=count, dimnames=list(locations$id,locations$id));
+	count = length(locations$id);
+	distMat = matrix(nrow=count, ncol=count, dimnames=list(locations$id,locations$id));
+	timeMat = matrix(nrow=count, ncol=count, dimnames=list(locations$id,locations$id));
 
-		#The OSRM API's default server does not allow the generation of a matrix with greater than or equal to
-		#10000 entries (a 100x100 square matrix, 50x200 rectangular matrix, etc.)
-		#Thus, for lists with 100 points or more, the matrix needs to be loaded in 99x99 submatrices, and stitched together
-		#into the final matrix
+	#The OSRM API's default server does not allow the generation of a matrix with greater than or equal to
+	#10000 entries (a 100x100 square matrix, 50x200 rectangular matrix, etc.)
+	#Thus, for lists with 100 points or more, the matrix needs to be loaded in 99x99 submatrices, and stitched together
+	#into the final matrix
 
-		repCount = ceiling(count / 99);
+	repCount = ceiling(count / 99);
 
-		loadedCount = 0;
-		for(y in 1:repCount) {
-			for(x in 1:repCount) {
-				#Declare lower and upper bounds for locations to be downloaded
-				xl = 1 + 99 * (x - 1);
-				yl = 1 + 99 * (y - 1);
-				xu = min(99 * x, count); #Don't exceed maximum matrix dimension
-				yu = min(99 * y, count); #Don't exceed maximum matrix dimension
+	loadedCount = 0;
+	for(y in 1:repCount) {
+		for(x in 1:repCount) {
+			#Declare lower and upper bounds for locations to be downloaded
+			xl = 1 + 99 * (x - 1);
+			yl = 1 + 99 * (y - 1);
+			xu = min(99 * x, count); #Don't exceed maximum matrix dimension
+			yu = min(99 * y, count); #Don't exceed maximum matrix dimension
 
-				#Get result from OSRM
-				result = osrmTable(
-					src=locations[yl:yu, c("id", "lon", "lat")],
-					dst=locations[xl:xu, c("id", "lon", "lat")],
-					measure="distance", osrm.profile="car"
-				);
+			#Get result from OSRM
+			result = osrmTable(
+				src=locations[yl:yu, c("id", "lon", "lat")],
+				dst=locations[xl:xu, c("id", "lon", "lat")],
+				measure=c("distance", "duration"), osrm.profile="car"
+			);
 
-				distMat[yl:yu,xl:xu] = result$distances #Copy from result into large matrix
-				loadedCount = loadedCount + (xu-xl+1) * (yu-yl+1); #Update progress counter
+			distMat[yl:yu,xl:xu] = result$distances #Copy from result into large matrix
+			timeMat[yl:yu,xl:xu] = result$durations #Copy from result into large matrix
+			loadedCount = loadedCount + (xu-xl+1) * (yu-yl+1); #Update progress counter
 
-				#Output progress
-				message(paste("Downloaded ", loadedCount, " of ", count^2, " distances, ", trunc(100 * loadedCount / count^2, digits=5), "% done", sep=""));
-			}
+			#Output progress
+			message(paste("Downloaded ", loadedCount, " of ", count^2, " distances, ", trunc(100 * loadedCount / count^2, digits=5), "% done", sep=""));
 		}
+	}
 
-    #Check for NA values
+    #Check for NA values, should only need to do for either distMat or timeMat, but not both (would be redundant)
     temp = c(distMat);
     #idx = 1:length(temp)
     if(length(temp[is.na(temp)]) > 0) {
@@ -118,13 +120,22 @@ roaddata = function(geocoords5, roaddatafilepath5) {
         }
       }
 
+
+      for(i in 1:count) {
+        for(j in 1:count) {
+          if(is.na(distMat[i,j])) {
+            timeMat[i,j] = Inf;
+          }
+        }
+      }
+
       #Probably more efficient way
       #temp[is.na(temp)] = Inf;
       #asdf=matrix(nrow=nrow(distMat), temp);
 
     }
 
-		save( distMat, file=roaddatafilepath5);
+		save( distMat, timeMat, file=roaddatafilepath5);
 		return(distMat);
 	}
 }

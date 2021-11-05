@@ -24,8 +24,13 @@ src = function() {
 }
 
 test = function() {
-  cities = read.csv("cities.csv");
-  count = 326;
+  #cities = read.csv("cities.csv");
+  #count = 326;
+  #coords = t(matrix(nrow=2,c(cities$lon[1:count], cities$lat[1:count]), byrow=T));
+
+  #Use Ethiopia data
+  cities = read.csv("farms.csv");
+  count = 1259;
   coords = t(matrix(nrow=2,c(cities$lon[1:count], cities$lat[1:count]), byrow=T));
 
   initinfo = round(runif(count, 0, 1));
