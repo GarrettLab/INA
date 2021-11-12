@@ -5,7 +5,8 @@
 #' Updated 2021-10-22
 
 #' @param geocoords5 matrix of x,y coordinates of nodes
-#' @param roaddatafilepath5 filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords
+#' @param roaddistfilepath5n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords - mutually exclusive with roadtimefilepath5n
+#' @param roadtimefilepath5n filepath to a R Data (.RData extension) file containing an adjacency matrix with the travel times via the road network between nodes in geocoords - mutually exclusive with roaddistfilepath5n
 #' @keywords road
 #' @export 
 #' @import osrm
@@ -16,10 +17,28 @@
 
 
 
-roaddata = function(geocoords5, roaddatafilepath5) {
-	if(file.exists(roaddatafilepath5)) {
-		load(roaddatafilepath5);
-		return(distMat); # Loaded from file
+roaddata = function(geocoords5, roaddistfilepath5=NA, roadtimefilepath5=NA) {
+	filepath = "";
+	isDist = F;
+    if(!is.na(roaddistfilepath5)) {
+	filepath = roaddistfilepath5;
+	isDist = T;
+    } else if(!is.na(roadtimefilepath5))  {
+	filepath = roadtimefilepath5;
+	isDist = F;
+    } else {
+	stop("Please specify either roaddistfilepath or roadtimefilepath");
+    }
+
+	if(file.exists(filepath)) {
+		load(filepath);
+
+		if(isDist) {
+			return(distMat); # Loaded from file
+		} else {
+			return(timeMat); # Loaded from file
+		}
+
 	} else {
 
 		message("The data file containing the adjacency matrix with distances between locations has not been found.");
@@ -135,8 +154,13 @@ roaddata = function(geocoords5, roaddatafilepath5) {
 
     }
 
-		save( distMat, timeMat, file=roaddatafilepath5);
-		return(distMat);
+		save( distMat, timeMat, file=filepath);
+
+		if(isDist) {
+			return(distMat); # Loaded from file
+		} else {
+			return(timeMat); # Loaded from file
+		}
 	}
 }
 
@@ -190,6 +214,6 @@ validate = function(locations, distMat) {
 
 #test = function() {
 	#cities = read.csv("cities.csv");
-	#roaddatafilepath5 = "roaddist.RData";
-	#waste = genDist(cities,roaddatafilepath5);
+	#filepath = "roaddist.RData";
+	#waste = genDist(cities,filepath);
 #}

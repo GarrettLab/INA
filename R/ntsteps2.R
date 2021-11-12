@@ -15,7 +15,8 @@
 #' @param seam3 communication adjacency matrix, read in if readseam3=T (rows as sources and columns as sinks)
 #' @param bpam3 dispersal adjacency matrix, read in if readbpam3=T (rows as sources and columns as sinks)
 #' @param geocoords3n matrix of x,y coordinates of nodes
-#' @param roaddatafilepath3n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords
+#' @param roaddistfilepath3n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords - mutually exclusive with roadtimefilepath3n
+#' @param roadtimefilepath3n filepath to a R Data (.RData extension) file containing an adjacency matrix with the travel times via the road network between nodes in geocoords - mutually exclusive with roaddistfilepath3n
 
 #' @param seamdist3 com (genmovnet) the function of distance used to estimate movement probability - 'random' (not related to distance) or 'powerlaw' 
 #' @param seampla3 com (genmovnet) inverse power law parameter a in ad^(-b)
@@ -70,7 +71,7 @@
 
 
 
-ntsteps2 <- function(nsteps, geocoords3n, roaddatafilepath3n, infon, vect1cn, vect1dn, readseam3, seam3, seamdist3, seampla3, seamplb3, seamrandp3, readbpam3, bpam3, bpamdist3, bpampla3, bpamplb3, bpamrandp3, readprobadoptvec3, probadoptvec3, probadoptmean3, probadoptsd3, maneffdir3, maneffmean3n, maneffsd3n, readprobestabvec3, probestabvec3, probestabmean3, probestabsd3, plotmpn=F){
+ntsteps2 <- function(nsteps, geocoords3n, roaddistfilepath3n, roadtimefilepath3n, infon, vect1cn, vect1dn, readseam3, seam3, seamdist3, seampla3, seamplb3, seamrandp3, readbpam3, bpam3, bpamdist3, bpampla3, bpamplb3, bpamrandp3, readprobadoptvec3, probadoptvec3, probadoptmean3, probadoptsd3, maneffdir3, maneffmean3n, maneffsd3n, readprobestabvec3, probestabvec3, probestabmean3, probestabsd3, plotmpn=F){
 
 # Numbering of steps refers to the numbering used in the INA User's Manual (1-5)
 
@@ -86,7 +87,7 @@ if(infon){
   # if generating the communication adj mat (not reading it in)
 
   if (!readseam3){ 
-    seam3 <- genmovnet(geocoords4n=geocoords3n, roaddatafilepath4n=roaddatafilepath3n, amdist4=seamdist3, amrandp4=seamrandp3, ampla4=seampla3, amplb4=seamplb3)
+    seam3 <- genmovnet(geocoords4n=geocoords3n, roaddistfilepath4n=roaddistfilepath3n, roadtimefilepath4n=roadtimefilepath3n, amdist4=seamdist3, amrandp4=seamrandp3, ampla4=seampla3, amplb4=seamplb3)
   }
 
   # 4.1. decision making - underlying probabilities of adoption
@@ -115,7 +116,7 @@ if(infon){
 # pathogens probably do not travel by road, so do not use road data
 
 if (!readbpam3){ 
-  bpam3 <- genmovnet(geocoords4n=geocoords3n, roaddatafilepath4n=NA, amdist4=bpamdist3, amrandp4=bpamrandp3, ampla4=bpampla3, amplb4=bpamplb3)  
+  bpam3 <- genmovnet(geocoords4n=geocoords3n, roaddistfilepath4n=roaddistfilepath3n, roadtimefilepath4n=roadtimefilepath3n, amdist4=bpamdist3, amrandp4=bpamrandp3, ampla4=bpampla3, amplb4=bpamplb3)
 }
 
 # 4.2. establishment - underlying probabilities of establishment

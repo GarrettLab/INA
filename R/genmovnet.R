@@ -11,7 +11,8 @@
 #' @param amplb4 inverse power law parameter b in ad^(-b)
 #' @param amrandp4 random matrix with entries binomial with probability p
 #' @param geocoords4n the matrix of xy coordinates for node locations, used when the probability of a link is a function of distance (note that the distance between each pair of locations is assumed to be greater than 1)
-#' @param roaddatafilepath4n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords
+#' @param roaddistfilepath4n filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords - mutually exclusive with roadtimefilepath4n
+#' @param roadtimefilepath4n filepath to a R Data (.RData extension) file containing an adjacency matrix with the travel times via the road network between nodes in geocoords - mutually exclusive with roaddistfilepath4n
 #' @keywords dispersal
 #' @export 
 #' @import igraph
@@ -29,16 +30,19 @@
 #' x9 <- genmovnet(j <- genlocs(numnodes4=300, xrange4 = c(0, 10), yrange4 = c(0, 100)), amdist4='powerlaw', ampla4=2, amplb4=1, iplot=T)
 
 
-genmovnet <- function(geocoords4n, amdist4, roaddatafilepath4n, iplot=F, amrandp4, ampla4, amplb4){
+genmovnet <- function(geocoords4n, amdist4, roaddistfilepath4n, roadtimefilepath4n, iplot=F, amrandp4, ampla4, amplb4){
 
   dimam <- dim(geocoords4n)[1]
 
   if (amdist4 == 'powerlaw') { # ad^(-b)
 
     tdist = NA
-    if(!is.na(roaddatafilepath4n)) {
+    if(!is.na(roaddistfilepath4n)) {
       #Load Road Distance Data
-      tdist <- roaddata(geocoords5=geocoords4n, roaddatafilepath5=roaddatafilepath4n)
+      tdist <- roaddata(geocoords5=geocoords4n, roaddistfilepath5=roaddistfilepath4n)
+    } else if(!is.na(roadtimefilepath4n)) {
+      #Load Road Time Data
+      tdist <- roaddata(geocoords5=geocoords4n, roadtimefilepath5=roadtimefilepath4n)
     } else {
       tdist <- as.matrix(dist(geocoords4n, method = "euclidean", diag=T, upper=T))
     }
