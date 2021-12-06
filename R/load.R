@@ -89,7 +89,7 @@ test = function() {
 
 output <- INAscene(
 	nreals=1,
-	ntimesteps=20,
+	ntimesteps=100,
 	doplot=F,
 	outputvol='more',
 	readgeocoords=T,
@@ -103,7 +103,7 @@ output <- INAscene(
 	readinitinfo=F,
 	initinfo=NA,
 	initinfo.norp='num',
-	initinfo.n=1, #May really want to change...
+	initinfo.n=0, #May really want to change...
 	initinfo.p=NA,
 	initinfo.dist='random',
 	readinitbio=F,
@@ -122,7 +122,7 @@ output <- INAscene(
 	bpam=NA,
 	bpamdist='powerlaw',
 	bpamrandp=NA,
-	bpampla=1, #May really want to change later
+	bpampla=100, #May really want to change later
 	bpamplb=1, #May really want to change later
 #	readprobadoptvec=F,
 #	probadoptvec=NA,
@@ -140,12 +140,16 @@ output <- INAscene(
 #	sampeffort=NA)
   readprobadoptvec=F,
   probadoptvec=NA,
-  probadoptmean=0.1,
-  probadoptsd=0.1,
+  #probadoptmean=0.1,
+  #probadoptsd=0.1,
+  probadoptmean=0,
+  probadoptsd=0,
   readprobestabvec=F,
   probestabvec=NA,
-  probestabmean=0.1,
-  probestabsd=0.1,
+  #probestabmean=0.1,
+  probestabmean=.99,
+  #probestabsd=0.1,
+  probestabsd=0,
   maneffdir='decrease_estab',
   maneffmean=0.5,
   maneffsd=0.1,
