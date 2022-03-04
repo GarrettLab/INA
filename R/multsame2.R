@@ -3,7 +3,7 @@
 #'
 #' This function runs and summarizes multiple INA simulations with the same parameter values.  (It uses INA functions estinfo, genlocs, initvals, setup2, genmovnet, spreadstep, makedec, estab, and ntsteps2.)
 #'
-#' Updated 2020-09-05
+#' Updated 2021-10-22
 
 #' @param nreals2 number of realizations to be evaluated
 #' @param usethreshman2 if T, use the threshold for the management effect size estimate; thus, information is never present anywhere unless the management effect estimate exceeds the threshold
@@ -28,6 +28,8 @@
 
 #' @param readgeocoords2 if T, read in geocoords2 - otherwise, generate it in each realization 
 #' @param geocoords2 matrix of x,y coordinates of nodes, read in if readgeocoords2=T
+#' @param roaddistfilepath2 filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords - mutually exclusive with roadtimefilepath2
+#' @param roadtimefilepath2 filepath to a R Data (.RData extension) file containing an adjacency matrix with the travel times via the road network between nodes in geocoords - mutually exclusive with roaddistfilepath2
 
 #' @param xrange2 (genlocs) range of x coordinates
 #' @param yrange2 (genlocs) range of y coordinates
@@ -85,7 +87,7 @@
 
 
 
-multsame2 <- function(nreals2, usethreshman2, ntimesteps2, geocoords2, readgeocoords2, maneffdir2, maneffmean2, maneffsd2, maneffthresh2, sampeffort2, xrange2, yrange2, numnodes2, randgeo2, readinitinfo2, initinfo2, initinfo.dist2, initinfo.n2, initinfo.norp2, initinfo.p2, readinitbio2, initbio2, initbio.dist2, initbio.n2, initbio.norp2, initbio.p2, readseam2, seam2, seamdist2, seampla2, seamplb2, seamrandp2, readbpam2, bpam2, bpamdist2, bpampla2, bpamplb2, bpamrandp2, probadoptmean2, probadoptsd2, probadoptvec2, readprobadoptvec2, probestabmean2, probestabsd2, readprobestabvec2, probestabvec2, doplot2=F){
+multsame2 <- function(nreals2, usethreshman2, ntimesteps2, geocoords2, roaddistfilepath2, roadtimefilepath2, readgeocoords2, maneffdir2, maneffmean2, maneffsd2, maneffthresh2, sampeffort2, xrange2, yrange2, numnodes2, randgeo2, readinitinfo2, initinfo2, initinfo.dist2, initinfo.n2, initinfo.norp2, initinfo.p2, readinitbio2, initbio2, initbio.dist2, initbio.n2, initbio.norp2, initbio.p2, readseam2, seam2, seamdist2, seampla2, seamplb2, seamrandp2, readbpam2, bpam2, bpamdist2, bpampla2, bpamplb2, bpamrandp2, probadoptmean2, probadoptsd2, probadoptvec2, readprobadoptvec2, probestabmean2, probestabsd2, readprobestabvec2, probestabvec2, doplot2=F){
 
 
   # determine the number of nodes, 
@@ -114,12 +116,11 @@ multsame2 <- function(nreals2, usethreshman2, ntimesteps2, geocoords2, readgeoco
 
   for(j in 1:nreals2) {
 
-
     tempo <- setup2(maneffmean3s=maneffmean2, maneffsd3s=maneffsd2, maneffthresh3=maneffthresh2, sampeffort3=sampeffort2, usethreshman3=usethreshman2, readgeocoords3s=readgeocoords2, geocoords3s=geocoords2, xrange3=xrange2, yrange3=yrange2, numnodes3=numnodes2, randgeo3=randgeo2, readinitinfo3=readinitinfo2, initinfo3=initinfo2, initinfo.dist3=initinfo.dist2, initinfo.n3=initinfo.n2, initinfo.norp3=initinfo.norp2, initinfo.p3=initinfo.p2, readinitbio3=readinitbio2, initbio3=initbio2, initbio.dist3=initbio.dist2, initbio.n3=initbio.n2, initbio.norp3=initbio.norp2, initbio.p3=initbio.p2, plotmp=doplot2)
 
 # note that the following uses the output object tempo
 
-    temp2 <- ntsteps2(nsteps=ntimesteps2, infon=tempo$com.yes, geocoords3n=tempo$geocoords3s, vect1cn=tempo$infovec, vect1dn=tempo$estabvec, readseam3=readseam2, seam3=seam2, seamdist3=seamdist2, seampla3=seampla2, seamplb3=seamplb2, seamrandp3=seamrandp2, readbpam3=readbpam2, bpam3=bpam2, bpamdist3=bpamdist2, bpampla3=bpampla2, bpamplb3=bpamplb2, bpamrandp3=bpamrandp2, readprobadoptvec3=readprobadoptvec2, probadoptvec3=probadoptvec2, probadoptmean3=probadoptmean2, probadoptsd3=probadoptsd2, probestabmean3=probestabmean2, probestabsd3=probestabsd2, maneffdir3=maneffdir2, maneffmean3n=maneffmean2, maneffsd3n=maneffsd2, readprobestabvec3=readprobestabvec2, probestabvec3=probestabvec2, plotmpn=doplot2)
+    temp2 <- ntsteps2(nsteps=ntimesteps2, infon=tempo$com.yes, geocoords3n=tempo$geocoords3s, roaddistfilepath3n=roaddistfilepath2, roadtimefilepath3n=roadtimefilepath2, vect1cn=tempo$infovec, vect1dn=tempo$estabvec, readseam3=readseam2, seam3=seam2, seamdist3=seamdist2, seampla3=seampla2, seamplb3=seamplb2, seamrandp3=seamrandp2, readbpam3=readbpam2, bpam3=bpam2, bpamdist3=bpamdist2, bpampla3=bpampla2, bpamplb3=bpamplb2, bpamrandp3=bpamrandp2, readprobadoptvec3=readprobadoptvec2, probadoptvec3=probadoptvec2, probadoptmean3=probadoptmean2, probadoptsd3=probadoptsd2, probestabmean3=probestabmean2, probestabsd3=probestabsd2, maneffdir3=maneffdir2, maneffmean3n=maneffmean2, maneffsd3n=maneffsd2, readprobestabvec3=readprobestabvec2, probestabvec3=probestabvec2, plotmpn=doplot2)
 
     # save the output from setup2 and ntsteps2
     multout[[j]] <- temp2

@@ -3,7 +3,7 @@
 #'
 #' This function implements and summarizes multiple simulations across a designated range of parameter values
 #'
-#' Updated 2020-10-13
+#' Updated 2021-10-22
 
 #' @param nreals number of realizations to be evaluated
 #' @param ntimesteps number of time steps to be evaluated
@@ -12,6 +12,8 @@
 
 #' @param readgeocoords if T, read in geocoords - otherwise, generate it in each realization
 #' @param geocoords matrix of x,y coordinates of nodes
+#' @param roaddistfilepath filepath to a R Data (.RData extension) file containing an adjacency matrix with the distances via the road network between nodes in geocoords - mutually exclusive with roadtimefilepath
+#' @param roadtimefilepath filepath to a R Data (.RData extension) file containing an adjacency matrix with the travel times via the road network between nodes in geocoords - mutually exclusive with roaddistfilepath
 
 #' @param numnodes (genlocs) the number of nodes, can be a vector of different numbers of nodes for scenario comparisons (numnodes can be entered as a vector to evaluate multiple scenarios)
 #' @param xrange (genlocs) range of x coordinates, e.g., c(0,50)
@@ -107,7 +109,7 @@
 
 
 
-INAscene <- function(nreals, ntimesteps, doplot=F, outputvol='more', readgeocoords, geocoords=NA, numnodes=NA, xrange=NA, yrange=NA, randgeo=NA, readinitinfo, initinfo=NA, initinfo.norp=NA, initinfo.n=NA, initinfo.p=NA, initinfo.dist=NA, readinitbio, initbio=NA, initbio.norp=NA, initbio.n=NA, initbio.p=NA,  initbio.dist=NA, readseam, seam=NA, seamdist=NA, seamrandp=NA, seampla=NA, seamplb=NA, readbpam, bpam=NA, bpamdist=NA, bpamrandp=NA, bpampla=NA, bpamplb=NA, readprobadoptvec, probadoptvec=NA, probadoptmean=NA, probadoptsd=NA, readprobestabvec, probestabvec=NA, probestabmean=NA, probestabsd=NA, maneffdir=NA, maneffmean=NA, maneffsd=NA, usethreshman, maneffthresh=NA, sampeffort=NA) {
+INAscene <- function(nreals, ntimesteps, doplot=F, outputvol='more', readgeocoords, geocoords=NA, roaddistfilepath=NA, roadtimefilepath=NA, numnodes=NA, xrange=NA, yrange=NA, randgeo=NA, readinitinfo, initinfo=NA, initinfo.norp=NA, initinfo.n=NA, initinfo.p=NA, initinfo.dist=NA, readinitbio, initbio=NA, initbio.norp=NA, initbio.n=NA, initbio.p=NA,  initbio.dist=NA, readseam, seam=NA, seamdist=NA, seamrandp=NA, seampla=NA, seamplb=NA, readbpam, bpam=NA, bpamdist=NA, bpamrandp=NA, bpampla=NA, bpamplb=NA, readprobadoptvec, probadoptvec=NA, probadoptmean=NA, probadoptsd=NA, readprobestabvec, probestabvec=NA, probestabmean=NA, probestabsd=NA, maneffdir=NA, maneffmean=NA, maneffsd=NA, usethreshman, maneffthresh=NA, sampeffort=NA) {
 
 ### error message(s)
 
@@ -311,7 +313,7 @@ for (j22 in 1:ncombs) {
   }
 
 
-  temp <- multsame2(nreals2=nreals, ntimesteps2=ntimesteps, doplot2=doplot, readgeocoords2=readgeocoords, geocoords2=geocoords, numnodes2=numnodes, xrange2=xrange, yrange2=yrange, randgeo2=randgeo, readinitinfo2=readinitinfo, initinfo2=initinfo, initinfo.norp2=initinfo.norp, initinfo.n2=initinfo.n, initinfo.p2=initinfo.p, initinfo.dist2=initinfo.dist, readinitbio2=readinitbio, initbio2=initbio, initbio.norp2=initbio.norp, initbio.n2=initbio.n, initbio.p2=initbio.p, initbio.dist2=initbio.dist, readseam2=readseam, seam2=seam,  seamdist2=seamdist, seamrandp2=seamrandp, seampla2=seampla, seamplb2=seamplb, readbpam2=readbpam, bpam2=bpam, bpamdist2=bpamdist, bpamrandp2=bpamrandp, bpampla2=bpampla, bpamplb2=bpamplb, readprobadoptvec2=readprobadoptvec, probadoptvec2=probadoptvec, probadoptmean2=probadoptmean, probadoptsd2=probadoptsd, readprobestabvec2=readprobestabvec, probestabvec2=probestabvec, probestabmean2=probestabmean, probestabsd2=probestabsd, maneffdir2=maneffdir, maneffmean2=maneffmean, maneffsd2=maneffsd, usethreshman2=usethreshman, maneffthresh2=maneffthresh, sampeffort2=sampeffort)
+  temp <- multsame2(nreals2=nreals, ntimesteps2=ntimesteps, doplot2=doplot, readgeocoords2=readgeocoords, geocoords2=geocoords, roaddistfilepath2=roaddistfilepath, roadtimefilepath2=roadtimefilepath, numnodes2=numnodes, xrange2=xrange, yrange2=yrange, randgeo2=randgeo, readinitinfo2=readinitinfo, initinfo2=initinfo, initinfo.norp2=initinfo.norp, initinfo.n2=initinfo.n, initinfo.p2=initinfo.p, initinfo.dist2=initinfo.dist, readinitbio2=readinitbio, initbio2=initbio, initbio.norp2=initbio.norp, initbio.n2=initbio.n, initbio.p2=initbio.p, initbio.dist2=initbio.dist, readseam2=readseam, seam2=seam,  seamdist2=seamdist, seamrandp2=seamrandp, seampla2=seampla, seamplb2=seamplb, readbpam2=readbpam, bpam2=bpam, bpamdist2=bpamdist, bpamrandp2=bpamrandp, bpampla2=bpampla, bpamplb2=bpamplb, readprobadoptvec2=readprobadoptvec, probadoptvec2=probadoptvec, probadoptmean2=probadoptmean, probadoptsd2=probadoptsd, readprobestabvec2=readprobestabvec, probestabvec2=probestabvec, probestabmean2=probestabmean, probestabsd2=probestabsd, maneffdir2=maneffdir, maneffmean2=maneffmean, maneffsd2=maneffsd, usethreshman2=usethreshman, maneffthresh2=maneffthresh, sampeffort2=sampeffort)
 
 
   multdetails[[rowcount]] <- temp
